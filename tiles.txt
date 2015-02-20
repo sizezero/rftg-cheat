@@ -1,0 +1,55 @@
+{6} Galactic Federation (1) Artist Colony
+{6} Galactic Exchange (1) Star Nomad Lair
+{6} New Galactic Order (1) Secluded World
+{6} Mining League (1) New Survivalists
+{6} Free Trade Association (2) Sentient Robots
+{6} New Economy (1) High-Gravity World
+{6} Galactic Renaissance (1) Fifth Column
+{5} Alien Research Ship (2) Spice World
+{5} Galactic Investors (2) New Vinland
+{5} Robot Surveyors (2) Asteroid Belt
+{5} Nanotechnology (2) Radioactive World
+{5} Organic Shipyards (2) Outlaw World
+{6} Galactic Reserves (2) Rebel Hideout
+{4} Information Tech (2) Pirate World
+{4} Investment Credits (2) Galactic Survey Headquarters
+{4} Replicant Robots (2) Space Port
+{4} Conscription (2) Gem World
+{2} Export Duties (4) Silicon World
+(4) Alien Robot Scout Ship {2} Galactic Recycling
+(6) Deserted Alien Library {1} JumpDrive Research
+(3) Universal Exports {3} Space Tourism
+{3} Isolation Policy (3) Planetary Nebula
+(4) Tourist World {2} Operations Affinity
+{1} Space Mercenaries (6) Lost Alien Battle Fleet
+(3) Gateway Station {3} Mad Scientists
+{3} Space Marines (3) Prosperous World
+{2} Local Subsidies (4) Distant World
+{3} Space Refineries (3) Uplift Overseers
+(2) Rebel Miners {6} System Diversification
+{3} Executive Power (3) Trading World
+(5) Designer Species, Ultd. {1} Advanced Logistics
+(3) Plague World {3} Homeworld Patriotism
+(4) Deserted Alien Outpost {2} Galactic Demand
+(2) Runaway Robots {4} Galactic Salon
+{1} Diversification (5) Lost Species Ark World
+{3} Alien Research Team (3) Rebel Warrior Race
+{1} Terraforming Robots (5) Terraformed World
+(3) JumpDrive Fuel Refinery {3} Merchant Guild
+{1} Public Works (5) Lost Alien Warship
+(2) Ore-Rich World {4} Propaganda Campaign
+{1} Backup Planning (6) Galactic Trendsetters
+{3} Free Trade Zone (3) Galactic Resort
+(6) Alien Sentinels {1} Hydroponics Guild
+(4) Transport Hub {2} Minor Research Labs
+{3} Trade Levies (3) Comet Zone
+{3} Galactic Mandate (3) Mining World
+{3} Major Research Labs (3) Galactic Fuel Depot
+{2} Colonial Affinity (4) Malevolent Lifeforms
+{3} Alien Uplift Blueprints (3) Information Hub
+(4) Armaments World {2} Space Docks
+(3) Blaster Gem Mines {3} Galactic Influence
+{2} Shipping Affinity (4) Deep Space Symbionts, Ltd.
+(5) Deserted Alien Colony {1} Technology Unions
+(4) Jungle World {2} Technology Affinity
+(1) Former Penal Colony {6} Galactic Bankers
