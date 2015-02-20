@@ -1,0 +1,6 @@
+
+# source images are too big
+img/src/
+
+# generated images
+img/dst/
