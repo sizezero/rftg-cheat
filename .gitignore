@@ -1,6 +1,6 @@
 
 # source images are too big
-img/src/
+img/
 
 # generated images
-img/dst/
+build/

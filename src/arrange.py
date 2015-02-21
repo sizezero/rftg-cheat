@@ -9,7 +9,7 @@ tileWidth = 685
 
 # loads file as image
 def load(tile, description):
-    f = "../img/src/tiles/"+tile+".xcf"
+    f = "../img/tiles/"+tile+".xcf"
     if os.path.exists(f):
         return pdb.gimp_file_load(f, f).layers[0]
     else:
@@ -79,7 +79,7 @@ def arrange():
 
     pdb.gimp_image_resize_to_layers(image)
     drawable = pdb.gimp_image_get_active_layer(image)
-    imagefile = "../img/dst/test1.xcf"
+    imagefile = "../build/test1.xcf"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
 arrange()
