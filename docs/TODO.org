@@ -17,7 +17,7 @@
 
 * DONE overlap tiles and their reverse side
 
-* TODO scan and splice all tiles
+* DONE scan and splice all tiles
 
 * TODO more layout files
 
@@ -29,3 +29,8 @@ bunches of either side by color significance
 - green
 - yellow
 
+* TODO add background
+
+* TODO add padding to generated image
+
+* TODO add layer mask to tiles to clip corners
