@@ -115,12 +115,13 @@ def layItOut(all, base):
 
     image = gimp.Image(1, 1, RGB)
     pad = 10
-    x = pad
-    y = pad
+    bigPad = pad * 3
+    x = bigPad
+    y = bigPad
     for row in ll:
         for id in row:
             if id is None:
-                x += (tileWidth+pad) * 2
+                x += tileWidth*2 + pad + bigPad
             else:
                 r = all[id]
 
@@ -134,9 +135,9 @@ def layItOut(all, base):
                 layW = pdb.gimp_layer_new_from_drawable(w['layer'], image)
                 image.add_layer(layW, 0)
                 layW.set_offsets(x, y)
-                x += tileWidth + pad
+                x += tileWidth + bigPad
 
-        x = pad
+        x = bigPad
         y += tileWidth + pad
 
     pdb.gimp_image_resize_to_layers(image)
