@@ -3,13 +3,11 @@
 
 from gimpfu import *
 import csv
+import os
 import os.path
+import re
 
 tileWidth = 685
-
-# 
-def loadLayout():
-    pass
 
 # loads file as image
 def loadTile(tile, description):
@@ -56,6 +54,27 @@ def loadAll():
             all[id] = { 'development':d, 'world':w }
     return all
 
+# returns a list of lists of None and Layout
+def loadLayout(layoutBase):
+    rows = []
+    linenum = 1
+    with open("../res/layout/"+layoutBase+".layout") as f:
+        for line in f:
+            row = []
+            for tok in re.split(r' +', line):
+                if tok == '_':
+                    row.append(None)
+                else:
+                    m = re.match(r'^(d|w)(\d\d)$', tok)
+                    if m:
+                        row.append(int(m.group(2)))
+                    else:
+                        raise Exception(layoutBase+"("+str(linenum)+"): bad token '"+tok+"' line "+line)
+            if len(row) != 0:
+                rows.append(row)
+                linenum += 1
+    return rows
+
 def arrange():
     all = loadAll()
 
@@ -86,4 +105,13 @@ def arrange():
     imagefile = "../build/test1.xcf"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
-arrange()
+def testLayoutLoader():
+    ll = loadLayout("test1")
+    with open('../build/test1.out', 'w') as f:
+        f.write(str(ll))
+
+def allLayouts():
+    pass
+
+testLayoutLoader()
+#arrange()
