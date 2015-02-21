@@ -29,7 +29,7 @@ bunches of either side by color significance
 - green
 - yellow
 
-* TODO add background
+* DONE add background
 
 * TODO add padding to generated image
 

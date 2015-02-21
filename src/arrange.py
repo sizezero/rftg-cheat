@@ -120,6 +120,7 @@ def testLayoutLoader():
     with open('../build/test1.out', 'w') as f:
         f.write(str(ll))
 
+# create and save an image for a given layout file
 def layItOut(all, base):
     ll = loadLayout(base)
 
@@ -160,6 +161,11 @@ def layItOut(all, base):
             y += ROW_HEIGHT
 
     pdb.gimp_image_resize_to_layers(image)
+
+    # add a black background
+    bg = gimp.Layer(image, "Background", image.width, image.height, 0, 100, 0)
+    image.add_layer(bg, len(image.layers))
+
     drawable = pdb.gimp_image_get_active_layer(image)
     imagefile = "../build/"+base+".xcf"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
