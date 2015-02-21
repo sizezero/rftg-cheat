@@ -1,0 +1,10 @@
+
+* DONE chop up a couple tiles
+
+* TODO load each tile
+
+* TODO read CSV
+
+* TODO generate a graphic for each missing bitmap
+
+* TODO create file for grid formats
