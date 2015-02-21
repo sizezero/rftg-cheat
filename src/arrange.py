@@ -13,10 +13,29 @@ def load(tile, description):
     else:
         image = gimp.Image(1, 1, RGB)
         # TODO make this look like a tile
-        background = gimp.Layer(image, "Background", 100, 100,
+        background = gimp.Layer(image, "Background", 685, 685,
                             RGB_IMAGE, 100, NORMAL_MODE)
+        pdb.gimp_context_set_background((195,195,195))
         background.fill(BACKGROUND_FILL)
         image.add_layer(background, 0)
+
+        fontname = "-bitstream-charter-medium-r-normal--12-120-75-75-p-68-iso8859-1[65 70 80_90]"
+        float=pdb.gimp_text_fontname(
+                            image,
+                            None,
+                            0,
+                            0,
+                            'some text',
+                            0,   #border
+                            True, #anitalias
+                            60,   #size
+                            PIXELS, #GIMP_PIXELS
+                            "Sans")
+        #pdb.gimp_floating_sel_anchor(float)
+        #pdb.gimp_text_layer_set_color(texture, fontcolor)
+        #image.add_layer(textlayer, 0)
+        pdb.gimp_image_merge_visible_layers(image, 2) # clip to bottom layer
+
         return image.layers[0]
 
 # returns a map of tiles and layers
