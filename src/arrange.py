@@ -5,6 +5,8 @@ from gimpfu import *
 import csv
 import os.path
 
+tileWidth = 685
+
 # loads file as image
 def load(tile, description):
     f = "../img/src/tiles/"+tile+".xcf"
@@ -12,29 +14,26 @@ def load(tile, description):
         return pdb.gimp_file_load(f, f).layers[0]
     else:
         image = gimp.Image(1, 1, RGB)
-        # TODO make this look like a tile
-        background = gimp.Layer(image, "Background", 685, 685,
+
+        background = gimp.Layer(image, "Background", tileWidth, tileWidth,
                             RGB_IMAGE, 100, NORMAL_MODE)
         pdb.gimp_context_set_background((195,195,195))
         background.fill(BACKGROUND_FILL)
         image.add_layer(background, 0)
 
-        fontname = "-bitstream-charter-medium-r-normal--12-120-75-75-p-68-iso8859-1[65 70 80_90]"
         float=pdb.gimp_text_fontname(
                             image,
-                            None,
+                            background,
                             0,
                             0,
-                            'some text',
+                            description,
                             0,   #border
                             True, #anitalias
-                            60,   #size
+                            120,   #size
                             PIXELS, #GIMP_PIXELS
                             "Sans")
-        #pdb.gimp_floating_sel_anchor(float)
-        #pdb.gimp_text_layer_set_color(texture, fontcolor)
-        #image.add_layer(textlayer, 0)
-        pdb.gimp_image_merge_visible_layers(image, 2) # clip to bottom layer
+        pdb.gimp_text_layer_resize(float, tileWidth, tileWidth)
+        pdb.gimp_floating_sel_anchor(float)
 
         return image.layers[0]
 
