@@ -117,38 +117,41 @@ def layItOut(all, base):
     image = gimp.Image(1, 1, RGB)
     pad = 10
     bigPad = pad * 6
-    x = bigPad
     y = bigPad
     xOff = 150
     yOff = 75
+    rowHeight = tileWidth + yOff + bigPad
     for row in ll:
-        for tup in row:
-            if tup is None:
-                x += tileWidth + xOff + bigPad
-            else:
-                type = tup[0]
-                if type=='d':
-                    frontT = 'development'
-                    backT = 'world'
-                else:
-                    frontT = 'world'
-                    backT = 'development'
-                id = tup[1]
-                r = all[id]
-
-                b = r[backT]
-                layBack = pdb.gimp_layer_new_from_drawable(b['layer'], image)
-                image.add_layer(layBack, 0)
-                layBack.set_offsets(x, y)
-
-                f = r[frontT]
-                layFront = pdb.gimp_layer_new_from_drawable(f['layer'], image)
-                image.add_layer(layFront, 0)
-                layFront.set_offsets(x+xOff, y+yOff)
-                x += tileWidth + xOff + bigPad
-
         x = bigPad
-        y += tileWidth + yOff + bigPad
+        if len(row)==1 and row[0] is None:
+            y += rowHeight / 2
+        else:
+            for tup in row:
+                if tup is None:
+                    x += tileWidth + xOff + bigPad
+                else:
+                    type = tup[0]
+                    if type=='d':
+                        frontT = 'development'
+                        backT = 'world'
+                    else:
+                        frontT = 'world'
+                        backT = 'development'
+                    id = tup[1]
+                    r = all[id]
+
+                    b = r[backT]
+                    layBack = pdb.gimp_layer_new_from_drawable(b['layer'], image)
+                    image.add_layer(layBack, 0)
+                    layBack.set_offsets(x, y)
+
+                    f = r[frontT]
+                    layFront = pdb.gimp_layer_new_from_drawable(f['layer'], image)
+                    image.add_layer(layFront, 0)
+                    layFront.set_offsets(x+xOff, y+yOff)
+                    x += tileWidth + xOff + bigPad
+
+            y += rowHeight
 
     pdb.gimp_image_resize_to_layers(image)
     drawable = pdb.gimp_image_get_active_layer(image)
