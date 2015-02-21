@@ -110,8 +110,48 @@ def testLayoutLoader():
     with open('../build/test1.out', 'w') as f:
         f.write(str(ll))
 
-def allLayouts():
-    pass
+def layItOut(all, base):
+    ll = loadLayout(base)
 
-testLayoutLoader()
+    image = gimp.Image(1, 1, RGB)
+    pad = 10
+    x = pad
+    y = pad
+    for row in ll:
+        for id in row:
+            if id is None:
+                x += (tileWidth+pad) * 2
+            else:
+                r = all[id]
+
+                d = r['development']
+                layD = pdb.gimp_layer_new_from_drawable(d['layer'], image)
+                image.add_layer(layD, 0)
+                layD.set_offsets(x, y)
+                x += tileWidth + pad
+
+                w = r['world']
+                layW = pdb.gimp_layer_new_from_drawable(w['layer'], image)
+                image.add_layer(layW, 0)
+                layW.set_offsets(x, y)
+                x += tileWidth + pad
+
+        x = pad
+        y += tileWidth + pad
+
+    pdb.gimp_image_resize_to_layers(image)
+    drawable = pdb.gimp_image_get_active_layer(image)
+    imagefile = "../build/test1.xcf"
+    pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
+
+def allLayouts():
+    all = loadAll()
+
+    for f in os.listdir('../res/layout'):
+        m = re.match(r'^(.+).layout$', f)
+        if m:
+            layItOut(all, m.group(1))
+
 #arrange()
+#testLayoutLoader()
+allLayouts()
