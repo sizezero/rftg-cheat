@@ -7,9 +7,13 @@ import os.path
 
 tileWidth = 685
 
+# 
+def loadLayout():
+    pass
+
 # loads file as image
-def load(tile, description):
-    f = "../img/tiles/"+tile+".xcf"
+def loadTile(tile, description):
+    f = "../res/img/tiles/"+tile+".xcf"
     if os.path.exists(f):
         return pdb.gimp_file_load(f, f).layers[0]
     else:
@@ -47,8 +51,8 @@ def loadAll():
         reader.next()
         for row in reader:
             id = int(row[0])
-            w = { 'cost':int(row[1]), 'name':row[2], 'layer':load("w%02d" % id, row[2]) }
-            d = { 'cost':int(row[3]), 'name':row[4], 'layer':load("d%02d" % id, row[4]) }
+            w = { 'cost':int(row[1]), 'name':row[2], 'layer':loadTile("w%02d" % id, row[2]) }
+            d = { 'cost':int(row[3]), 'name':row[4], 'layer':loadTile("d%02d" % id, row[4]) }
             all[id] = { 'development':d, 'world':w }
     return all
 

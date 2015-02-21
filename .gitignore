@@ -1,6 +1,6 @@
 
 # source images are too big
-img/
+res/img/
 
 # generated images
 build/
