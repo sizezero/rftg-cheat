@@ -7,9 +7,17 @@ import os
 import os.path
 import re
 
-tileWidth = 685
+# the rough tile width and height
+TILE_SIZE = 685
 
-# loads file as image
+# small spaces between tiles
+PAD = 10
+
+# When tiles and their opposite side are stacked; how much to overlap
+X_OVERLAP = 0.20
+Y_OVERLAP = 0.10
+
+# loads file as image, returns the layer
 def loadTile(tile, description):
     f = "../res/img/tiles/"+tile+".xcf"
     if os.path.exists(f):
@@ -17,12 +25,14 @@ def loadTile(tile, description):
     else:
         image = gimp.Image(1, 1, RGB)
 
-        background = gimp.Layer(image, "Background", tileWidth, tileWidth,
+        background = gimp.Layer(image, "Background", TILE_SIZE, TILE_SIZE,
                             RGB_IMAGE, 100, NORMAL_MODE)
-        pdb.gimp_context_set_background((195,195,195))
+        COLOR_GRAY = (195,195,195)
+        pdb.gimp_context_set_background(COLOR_GRAY)
         background.fill(BACKGROUND_FILL)
         image.add_layer(background, 0)
 
+        TEXT_SIZE = int(TILE_SIZE / 5.7)
         float=pdb.gimp_text_fontname(
                             image,
                             background,
@@ -31,10 +41,10 @@ def loadTile(tile, description):
                             description,
                             0,   #border
                             True, #anitalias
-                            120,   #size
+                            TEXT_SIZE,   #size
                             PIXELS, #GIMP_PIXELS
                             "Sans")
-        pdb.gimp_text_layer_resize(float, tileWidth, tileWidth)
+        pdb.gimp_text_layer_resize(float, TILE_SIZE, TILE_SIZE)
         pdb.gimp_floating_sel_anchor(float)
 
         return image.layers[0]
@@ -82,8 +92,7 @@ def arrange():
     # stick all tiles vertically in a giant image
     
     image = gimp.Image(1, 1, RGB)
-    pad = 10
-    y = pad
+    y = PAD
     id = 1
     while id in all:
         r = all[id]
@@ -91,14 +100,14 @@ def arrange():
         d = r['development']
         layD = pdb.gimp_layer_new_from_drawable(d['layer'], image)
         image.add_layer(layD, 0)
-        layD.set_offsets(pad, y)
+        layD.set_offsets(PAD, y)
 
         w = r['world']
         layW = pdb.gimp_layer_new_from_drawable(w['layer'], image)
         image.add_layer(layW, 0)
-        layW.set_offsets(pad+layD.width+pad, y)
+        layW.set_offsets(PAD+layD.width+PAD, y)
 
-        y += pad+max(layD.height, layW.height)
+        y += PAD+max(layD.height, layW.height)
         id += 1
 
     pdb.gimp_image_resize_to_layers(image)
@@ -115,43 +124,40 @@ def layItOut(all, base):
     ll = loadLayout(base)
 
     image = gimp.Image(1, 1, RGB)
-    pad = 10
-    bigPad = pad * 6
-    y = bigPad
-    xOff = 150
-    yOff = 75
-    rowHeight = tileWidth + yOff + bigPad
+    BIG_PAD = PAD * 6
+    y = BIG_PAD
+    X_OFFSET = int(X_OVERLAP * TILE_SIZE)
+    Y_OFFSET = int(Y_OVERLAP * TILE_SIZE)
+    ROW_HEIGHT = TILE_SIZE + Y_OFFSET + BIG_PAD
     for row in ll:
-        x = bigPad
+        x = BIG_PAD
         if len(row)==1 and row[0] is None:
-            y += rowHeight / 2
+            y += ROW_HEIGHT / 2
         else:
             for tup in row:
                 if tup is None:
-                    x += tileWidth + xOff + bigPad
+                    x += TILE_SIZE + X_OFFSET + BIG_PAD
                 else:
                     type = tup[0]
-                    if type=='d':
-                        frontT = 'development'
-                        backT = 'world'
-                    else:
-                        frontT = 'world'
-                        backT = 'development'
                     id = tup[1]
                     r = all[id]
+                    if type=='d':
+                        backLayer = r['world']['layer']
+                        frontLayer = r['development']['layer']
+                    else:
+                        frontLayer = r['world']['layer']
+                        backLayer = r['development']['layer']
 
-                    b = r[backT]
-                    layBack = pdb.gimp_layer_new_from_drawable(b['layer'], image)
+                    layBack = pdb.gimp_layer_new_from_drawable(backLayer, image)
                     image.add_layer(layBack, 0)
                     layBack.set_offsets(x, y)
 
-                    f = r[frontT]
-                    layFront = pdb.gimp_layer_new_from_drawable(f['layer'], image)
+                    layFront = pdb.gimp_layer_new_from_drawable(frontLayer, image)
                     image.add_layer(layFront, 0)
-                    layFront.set_offsets(x+xOff, y+yOff)
-                    x += tileWidth + xOff + bigPad
+                    layFront.set_offsets(x+X_OFFSET, y+Y_OFFSET)
+                    x += TILE_SIZE + X_OFFSET + BIG_PAD
 
-            y += rowHeight
+            y += ROW_HEIGHT
 
     pdb.gimp_image_resize_to_layers(image)
     drawable = pdb.gimp_image_get_active_layer(image)
