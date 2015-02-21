@@ -60,6 +60,7 @@ def loadLayout(layoutBase):
     linenum = 1
     with open("../res/layout/"+layoutBase+".layout") as f:
         for line in f:
+            line = line.strip()
             row = []
             for tok in re.split(r' +', line):
                 if tok == '_':
@@ -115,7 +116,7 @@ def layItOut(all, base):
 
     image = gimp.Image(1, 1, RGB)
     pad = 10
-    bigPad = pad * 3
+    bigPad = pad * 6
     x = bigPad
     y = bigPad
     for row in ll:
@@ -138,11 +139,11 @@ def layItOut(all, base):
                 x += tileWidth + bigPad
 
         x = bigPad
-        y += tileWidth + pad
+        y += tileWidth + bigPad
 
     pdb.gimp_image_resize_to_layers(image)
     drawable = pdb.gimp_image_get_active_layer(image)
-    imagefile = "../build/test1.xcf"
+    imagefile = "../build/"+base+".xcf"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
 def allLayouts():
