@@ -1,9 +1,9 @@
 
 * DONE chop up a couple tiles
 
-* TODO load each tile
+* DONE load each tile
 
-* TODO read CSV
+* DONE read CSV
 
 * TODO generate a graphic for each missing bitmap
 
