@@ -160,7 +160,9 @@ def layItOut(all, base):
 
             y += ROW_HEIGHT
 
+    # resize image to layers plus padding
     pdb.gimp_image_resize_to_layers(image)
+    pdb.gimp_image_resize(image, image.width + BIG_PAD*2, image.height + BIG_PAD*2, BIG_PAD, BIG_PAD)
 
     # add a black background
     bg = gimp.Layer(image, "Background", image.width, image.height, 0, 100, 0)
