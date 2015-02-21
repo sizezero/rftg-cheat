@@ -68,7 +68,7 @@ def loadLayout(layoutBase):
                 else:
                     m = re.match(r'^(d|w)(\d\d)$', tok)
                     if m:
-                        row.append(int(m.group(2)))
+                        row.append((m.group(1), int(m.group(2))))
                     else:
                         raise Exception(layoutBase+"("+str(linenum)+"): bad token '"+tok+"' line "+line)
             if len(row) != 0:
@@ -119,27 +119,36 @@ def layItOut(all, base):
     bigPad = pad * 6
     x = bigPad
     y = bigPad
+    xOff = 150
+    yOff = 75
     for row in ll:
-        for id in row:
-            if id is None:
-                x += tileWidth*2 + pad + bigPad
+        for tup in row:
+            if tup is None:
+                x += tileWidth + xOff + bigPad
             else:
+                type = tup[0]
+                if type=='d':
+                    frontT = 'development'
+                    backT = 'world'
+                else:
+                    frontT = 'world'
+                    backT = 'development'
+                id = tup[1]
                 r = all[id]
 
-                d = r['development']
-                layD = pdb.gimp_layer_new_from_drawable(d['layer'], image)
-                image.add_layer(layD, 0)
-                layD.set_offsets(x, y)
-                x += tileWidth + pad
+                b = r[backT]
+                layBack = pdb.gimp_layer_new_from_drawable(b['layer'], image)
+                image.add_layer(layBack, 0)
+                layBack.set_offsets(x, y)
 
-                w = r['world']
-                layW = pdb.gimp_layer_new_from_drawable(w['layer'], image)
-                image.add_layer(layW, 0)
-                layW.set_offsets(x, y)
-                x += tileWidth + bigPad
+                f = r[frontT]
+                layFront = pdb.gimp_layer_new_from_drawable(f['layer'], image)
+                image.add_layer(layFront, 0)
+                layFront.set_offsets(x+xOff, y+yOff)
+                x += tileWidth + xOff + bigPad
 
         x = bigPad
-        y += tileWidth + bigPad
+        y += tileWidth + yOff + bigPad
 
     pdb.gimp_image_resize_to_layers(image)
     drawable = pdb.gimp_image_get_active_layer(image)

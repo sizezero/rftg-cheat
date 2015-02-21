@@ -9,13 +9,15 @@
 
 * DONE create file for grid formats
 
-* TODO make some layout files
+* DONE make some layout files
 
 - DONE grouped by dev cost 1,2,3,4,5,6
 
 - DONE planet cost/color grid
 
-* TODO overlap tiles and their reverse side
+* DONE overlap tiles and their reverse side
+
+* TODO scan and splice all tiles
 
 * TODO more layout files
 
