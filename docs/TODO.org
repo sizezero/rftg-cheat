@@ -13,7 +13,11 @@
 
 - DONE grouped by dev cost 1,2,3,4,5,6
 
-- planet cost/color grid
+- DONE planet cost/color grid
+
+* TODO overlap tiles and their reverse side
+
+* TODO more layout files
 
 bunches of either side by color significance
 
@@ -22,3 +26,4 @@ bunches of either side by color significance
 - red
 - green
 - yellow
+
