@@ -125,6 +125,29 @@ def drawTile(type, id, all, image, x, y):
     layFront = pdb.gimp_layer_new_from_drawable(frontLayer, image)
     image.add_layer(layFront, 0)
     layFront.set_offsets(x+X_OFFSET, y+Y_OFFSET)
+
+    if SHOW_ID_ON_IMAGE:
+        DX = X_OFFSET
+        DY = Y_OFFSET
+        tLayer = gimp.Layer(image, "text"+str(id), DX, DY, RGBA_IMAGE, 100, NORMAL_MODE)
+        image.add_layer(tLayer, 0)
+        pdb.gimp_selection_all(image)
+        pdb.gimp_edit_clear(tLayer)
+
+        TEXT_SIZE = 50
+        COLOR_WHITE = (255, 255, 255)
+        pdb.gimp_context_set_foreground(COLOR_WHITE)
+        float=pdb.gimp_text_fontname(
+            image, tLayer, 0, 0, str(id),
+            0,   #border
+            True, #anitalias
+            TEXT_SIZE,   #size
+            PIXELS, #GIMP_PIXELS
+            "Sans")
+        pdb.gimp_text_layer_resize(float, DX, DY)
+        pdb.gimp_floating_sel_anchor(float)
+
+        tLayer.set_offsets(x, y+TILE_DIMENSION)
     
 # create and save an image for a given layout file
 def layItOut(all, srcFname, dstFnameNoExtension):
