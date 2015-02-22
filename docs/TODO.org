@@ -34,3 +34,5 @@ bunches of either side by color significance
 * DONE add padding to generated image
 
 * DONE add layer mask to tiles to clip corners
+
+* DONE add recurive directory handling to layouts

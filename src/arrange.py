@@ -76,10 +76,10 @@ def loadAll():
     return all
 
 # returns a list of lists of None and Layout
-def loadLayout(layoutBase):
+def loadLayout(fname):
     rows = []
     linenum = 1
-    with open("../res/layout/"+layoutBase+".layout") as f:
+    with open(fname) as f:
         for line in f:
             line = line.strip()
             row = []
@@ -91,7 +91,7 @@ def loadLayout(layoutBase):
                     if m:
                         row.append((m.group(1), int(m.group(2))))
                     else:
-                        raise Exception(layoutBase+"("+str(linenum)+"): bad token '"+tok+"' line "+line)
+                        raise Exception(fname+"("+str(linenum)+"): bad token '"+tok+"' line "+line)
             if len(row) != 0:
                 rows.append(row)
                 linenum += 1
@@ -132,8 +132,8 @@ def testLayoutLoader():
         f.write(str(ll))
 
 # create and save an image for a given layout file
-def layItOut(all, base):
-    ll = loadLayout(base)
+def layItOut(all, srcFname, dstFnameNoExtension):
+    ll = loadLayout(srcFname)
 
     image = gimp.Image(1, 1, RGB)
     BIG_PAD = PAD * 6
@@ -180,21 +180,34 @@ def layItOut(all, base):
     image.add_layer(bg, len(image.layers))
 
     drawable = pdb.gimp_image_get_active_layer(image)
-    imagefile = "../build/"+base+".xcf"
+    imagefile = dstFnameNoExtension+".xcf"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
     pdb.gimp_image_merge_visible_layers(image, 2)
     drawable = pdb.gimp_image_get_active_layer(image)
-    imagefile = "../build/"+base+".jpg"
+    imagefile = dstFnameNoExtension+".jpg"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
 def allLayouts():
     all = loadAll()
 
-    for f in os.listdir('../res/layout'):
-        m = re.match(r'^(.+).layout$', f)
-        if m:
-            layItOut(all, m.group(1))
+    for root, dirs, files in os.walk('../res/layout'):
+        m = re.match(r'^../res/layout/?(.*)$', root)
+        if not m:
+            raise Exception("path problem root: "+root)
+        dstDir = os.path.join('../build', m.group(1))
+
+
+        # create the dirs if they don't exist
+        for d in dirs:
+            newDir = os.path.join(dstDir, d)
+            if not os.path.exists(newDir):
+                os.mkdir(newDir)
+        # create the layout for each file
+        for f in files:
+            m = re.match(r'^(.+).layout$', f)
+            if m:
+                layItOut(all, os.path.join(root, f), os.path.join(dstDir, m.group(1)))
 
 #arrange()
 #testLayoutLoader()
