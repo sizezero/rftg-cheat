@@ -13,11 +13,19 @@ TILE_DIMENSION = 685
 
 # the smallest spaces between tiles (pixels)
 PAD = 10
+BIG_PAD = PAD * 6
 
 # When tiles and their opposite side are stacked; how much to overlap
 # (percentage of tile dimension)
 X_OVERLAP = 0.20
 Y_OVERLAP = 0.10
+
+X_OFFSET = int(X_OVERLAP * TILE_DIMENSION)
+Y_OFFSET = int(Y_OVERLAP * TILE_DIMENSION)
+
+# true if the id of the tile should be displayed in the generated
+# image
+SHOW_ID_ON_IMAGE = True
 
 # loads file as image, returns the layer
 def loadTile(tile, description):
@@ -132,15 +140,30 @@ def testLayoutLoader():
     with open('../build/test1.out', 'w') as f:
         f.write(str(ll))
 
+# displays the tile; returns the width of the displayed tile
+def drawTile(type, id, all, image, x, y):
+    r = all[id]
+    if type=='d':
+        backLayer = r['world']['layer']
+        frontLayer = r['development']['layer']
+    else:
+        frontLayer = r['world']['layer']
+        backLayer = r['development']['layer']
+
+    layBack = pdb.gimp_layer_new_from_drawable(backLayer, image)
+    image.add_layer(layBack, 0)
+    layBack.set_offsets(x, y)
+
+    layFront = pdb.gimp_layer_new_from_drawable(frontLayer, image)
+    image.add_layer(layFront, 0)
+    layFront.set_offsets(x+X_OFFSET, y+Y_OFFSET)
+    
 # create and save an image for a given layout file
 def layItOut(all, srcFname, dstFnameNoExtension):
     ll = loadLayout(srcFname)
 
     image = gimp.Image(1, 1, RGB)
-    BIG_PAD = PAD * 6
     y = BIG_PAD
-    X_OFFSET = int(X_OVERLAP * TILE_DIMENSION)
-    Y_OFFSET = int(Y_OVERLAP * TILE_DIMENSION)
     ROW_HEIGHT = TILE_DIMENSION + Y_OFFSET + BIG_PAD
     for row in ll:
         x = BIG_PAD
@@ -148,28 +171,9 @@ def layItOut(all, srcFname, dstFnameNoExtension):
             y += ROW_HEIGHT / 2
         else:
             for tup in row:
-                if tup is None:
-                    x += TILE_DIMENSION + X_OFFSET + BIG_PAD
-                else:
-                    type = tup[0]
-                    id = tup[1]
-                    r = all[id]
-                    if type=='d':
-                        backLayer = r['world']['layer']
-                        frontLayer = r['development']['layer']
-                    else:
-                        frontLayer = r['world']['layer']
-                        backLayer = r['development']['layer']
-
-                    layBack = pdb.gimp_layer_new_from_drawable(backLayer, image)
-                    image.add_layer(layBack, 0)
-                    layBack.set_offsets(x, y)
-
-                    layFront = pdb.gimp_layer_new_from_drawable(frontLayer, image)
-                    image.add_layer(layFront, 0)
-                    layFront.set_offsets(x+X_OFFSET, y+Y_OFFSET)
-                    x += TILE_DIMENSION + X_OFFSET + BIG_PAD
-
+                if tup is not None:
+                    drawTile(tup[0], tup[1], all, image, x, y)
+                x += TILE_DIMENSION + X_OFFSET + BIG_PAD
             y += ROW_HEIGHT
 
     # resize image to layers plus padding
@@ -197,7 +201,6 @@ def allLayouts():
         if not m:
             raise Exception("path problem root: "+root)
         dstDir = os.path.join('../build', m.group(1))
-
 
         # create the dirs if they don't exist
         for d in dirs:
