@@ -108,11 +108,6 @@ def loadLayout(fname):
                 linenum += 1
     return rows
 
-def testLayoutLoader():
-    ll = loadLayout("test1")
-    with open('../build/test1.out', 'w') as f:
-        f.write(str(ll))
-
 # displays the tile; returns the width of the displayed tile
 def drawTile(type, id, all, image, x, y):
     r = all[id]
@@ -186,6 +181,4 @@ def allLayouts():
             if m:
                 layItOut(all, os.path.join(root, f), os.path.join(dstDir, m.group(1)))
 
-#arrange()
-#testLayoutLoader()
 allLayouts()
