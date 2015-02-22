@@ -43,6 +43,8 @@ def loadTile(tile, description):
         pdb.gimp_edit_clear(layer)
         return layer
     else:
+        # if the image file does not exist then generate a placeholder
+        # image
         image = gimp.Image(1, 1, RGB)
 
         background = gimp.Layer(image, "Background", TILE_DIMENSION, TILE_DIMENSION,
@@ -105,35 +107,6 @@ def loadLayout(fname):
                 rows.append(row)
                 linenum += 1
     return rows
-
-def arrange():
-    all = loadAll()
-
-    # stick all tiles vertically in a giant image
-    
-    image = gimp.Image(1, 1, RGB)
-    y = PAD
-    id = 1
-    while id in all:
-        r = all[id]
-
-        d = r['development']
-        layD = pdb.gimp_layer_new_from_drawable(d['layer'], image)
-        image.add_layer(layD, 0)
-        layD.set_offsets(PAD, y)
-
-        w = r['world']
-        layW = pdb.gimp_layer_new_from_drawable(w['layer'], image)
-        image.add_layer(layW, 0)
-        layW.set_offsets(PAD+layD.width+PAD, y)
-
-        y += PAD+max(layD.height, layW.height)
-        id += 1
-
-    pdb.gimp_image_resize_to_layers(image)
-    drawable = pdb.gimp_image_get_active_layer(image)
-    imagefile = "../build/test1.xcf"
-    pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
 def testLayoutLoader():
     ll = loadLayout("test1")
