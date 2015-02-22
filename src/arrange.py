@@ -63,7 +63,7 @@ def loadTile(tile, description):
 # returns a map of tiles and layers
 def loadAll():
     all = {}
-    with open('../docs/roll.csv') as csvfile:
+    with open('../docs/tiles.csv') as csvfile:
         reader = csv.reader(csvfile)
         # ignore two header lines
         reader.next()
