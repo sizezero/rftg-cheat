@@ -6,6 +6,7 @@ import csv
 import os
 import os.path
 import re
+import math
 
 # the rough tile width and height
 TILE_SIZE = 685
@@ -21,7 +22,17 @@ Y_OVERLAP = 0.10
 def loadTile(tile, description):
     f = "../res/img/tiles/"+tile+".xcf"
     if os.path.exists(f):
-        return pdb.gimp_file_load(f, f).layers[0]
+        image = pdb.gimp_file_load(f, f)
+        layer = image.layers[0]
+        # crop the corners a bit
+        # select whole image, chop off square of corners, add circle selection
+        # chop inverse
+        R = 0.05 # radius of corner circle as percentage of tile dimensions
+        r = TILE_SIZE * R
+        pdb.gimp_image_select_round_rectangle(image, 2, 0, 0, image.width, image.height, r, r)
+        pdb.gimp_selection_invert(image)
+        pdb.gimp_edit_clear(layer)
+        return layer
     else:
         image = gimp.Image(1, 1, RGB)
 

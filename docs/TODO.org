@@ -33,4 +33,4 @@ bunches of either side by color significance
 
 * DONE add padding to generated image
 
-* TODO add layer mask to tiles to clip corners
+* DONE add layer mask to tiles to clip corners
