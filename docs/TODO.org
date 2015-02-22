@@ -19,7 +19,7 @@
 
 * DONE scan and splice all tiles
 
-* TODO more layout files
+* DONE more layout files
 
 bunches of either side by color significance
 
