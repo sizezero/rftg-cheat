@@ -8,13 +8,14 @@ import os.path
 import re
 import math
 
-# the rough tile width and height
-TILE_SIZE = 685
+# the rough tile width and height (pixels)
+TILE_DIMENSION = 685
 
-# small spaces between tiles
+# the smallest spaces between tiles (pixels)
 PAD = 10
 
 # When tiles and their opposite side are stacked; how much to overlap
+# (percentage of tile dimension)
 X_OVERLAP = 0.20
 Y_OVERLAP = 0.10
 
@@ -28,7 +29,7 @@ def loadTile(tile, description):
         # select whole image, chop off square of corners, add circle selection
         # chop inverse
         R = 0.05 # radius of corner circle as percentage of tile dimensions
-        r = TILE_SIZE * R
+        r = TILE_DIMENSION * R
         pdb.gimp_image_select_round_rectangle(image, 2, 0, 0, image.width, image.height, r, r)
         pdb.gimp_selection_invert(image)
         pdb.gimp_edit_clear(layer)
@@ -36,14 +37,14 @@ def loadTile(tile, description):
     else:
         image = gimp.Image(1, 1, RGB)
 
-        background = gimp.Layer(image, "Background", TILE_SIZE, TILE_SIZE,
+        background = gimp.Layer(image, "Background", TILE_DIMENSION, TILE_DIMENSION,
                             RGB_IMAGE, 100, NORMAL_MODE)
         COLOR_GRAY = (195,195,195)
         pdb.gimp_context_set_background(COLOR_GRAY)
         background.fill(BACKGROUND_FILL)
         image.add_layer(background, 0)
 
-        TEXT_SIZE = int(TILE_SIZE / 5.7)
+        TEXT_SIZE = int(TILE_DIMENSION / 5.7)
         float=pdb.gimp_text_fontname(
                             image,
                             background,
@@ -55,7 +56,7 @@ def loadTile(tile, description):
                             TEXT_SIZE,   #size
                             PIXELS, #GIMP_PIXELS
                             "Sans")
-        pdb.gimp_text_layer_resize(float, TILE_SIZE, TILE_SIZE)
+        pdb.gimp_text_layer_resize(float, TILE_DIMENSION, TILE_DIMENSION)
         pdb.gimp_floating_sel_anchor(float)
 
         return image.layers[0]
@@ -138,9 +139,9 @@ def layItOut(all, srcFname, dstFnameNoExtension):
     image = gimp.Image(1, 1, RGB)
     BIG_PAD = PAD * 6
     y = BIG_PAD
-    X_OFFSET = int(X_OVERLAP * TILE_SIZE)
-    Y_OFFSET = int(Y_OVERLAP * TILE_SIZE)
-    ROW_HEIGHT = TILE_SIZE + Y_OFFSET + BIG_PAD
+    X_OFFSET = int(X_OVERLAP * TILE_DIMENSION)
+    Y_OFFSET = int(Y_OVERLAP * TILE_DIMENSION)
+    ROW_HEIGHT = TILE_DIMENSION + Y_OFFSET + BIG_PAD
     for row in ll:
         x = BIG_PAD
         if len(row)==1 and row[0] is None:
@@ -148,7 +149,7 @@ def layItOut(all, srcFname, dstFnameNoExtension):
         else:
             for tup in row:
                 if tup is None:
-                    x += TILE_SIZE + X_OFFSET + BIG_PAD
+                    x += TILE_DIMENSION + X_OFFSET + BIG_PAD
                 else:
                     type = tup[0]
                     id = tup[1]
@@ -167,7 +168,7 @@ def layItOut(all, srcFname, dstFnameNoExtension):
                     layFront = pdb.gimp_layer_new_from_drawable(frontLayer, image)
                     image.add_layer(layFront, 0)
                     layFront.set_offsets(x+X_OFFSET, y+Y_OFFSET)
-                    x += TILE_SIZE + X_OFFSET + BIG_PAD
+                    x += TILE_DIMENSION + X_OFFSET + BIG_PAD
 
             y += ROW_HEIGHT
 
