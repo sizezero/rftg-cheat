@@ -15,6 +15,7 @@ zip: images
 	( cd build/rftg-cheat && \
 	  ln -s ../../doc/tiles.csv &&\
 	  ln -s ../../res/layout )
+	find build -name '*.xcf' -delete
 	( cd build && \
 	  zip -r rftg-cheat.zip rftg-cheat )
 
