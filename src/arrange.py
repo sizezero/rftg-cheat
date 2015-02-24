@@ -191,7 +191,7 @@ def allLayouts():
         m = re.match(r'^../res/layout/?(.*)$', root)
         if not m:
             raise Exception("path problem root: "+root)
-        dstDir = os.path.join('../build', m.group(1))
+        dstDir = os.path.join('../build/rftg-cheat', m.group(1))
 
         # create the dirs if they don't exist
         for d in dirs:
