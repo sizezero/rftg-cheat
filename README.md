@@ -7,17 +7,17 @@ sheets.  The cheet sheets can be used for play aids or help in
 memorizing tile sets.
 
 There are 55 tiles in the game each with a unique front and back side.
-These are enumerated in the file <a href=""><tt>docs/tiles.csv</tt></a>
+These are enumerated in the file [docs/tiles.csv](docs/tiles.csv)
 
 For each of these tiles there needs to be two corresponding image
-files in the res/img/tiles/ directory one named dNN.xcf and one named
-wNN.xcf where d and w represents the development and world
-respectively and NN is the id of the tile as indicated in
+files in the `res/img/tiles/` directory one named `dNN.xcf` and one named
+`wNN.xcf` where `d` and `w` represents the development and world
+respectively and `NN` is the id of the tile as indicated in
 `docs/tiles.csv` .  The image type can be any image type supported by
 gimp. I would provide these source tiles but the game publisher has
 not responded to my requests.
 
-Layout files exist in the res/layout directory.  These are text files
+Layout files exist in the `res/layout directory` .  These are text files
 that represent a single cheat sheet to create.  For each layout file,
 an image file will be created in the build directory.
 
@@ -47,7 +47,7 @@ In order to run this program you need:
 
 Edit the file src/arrange.py and set adjust the following constants
 
-```
+```python
 # the rough tile width and height (pixels)
 TILE_DIMENSION = 685
 
