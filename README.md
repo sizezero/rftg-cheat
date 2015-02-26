@@ -18,11 +18,12 @@ respectively and `NN` is the id of the tile as indicated in
 gimp. I would provide these source tiles but the game publisher has
 not responded to my requests.
 
-Layout files exist in the `res/layout` directory.  These are text
-files that represent a single cheat sheet.  For each layout file, an
-image file will be created in the `build/` directory.
+Layout files exist in the [res/layout](res/layout) directory.  These
+are text files that represent a single cheat sheet.  For each layout
+file, an image file will be created in the `build/` directory.
 
-For example, the layout file `green.layout` looks like this:
+For example, the layout file [green.layout](res/layout/green.layout)
+looks like this:
 
 ```
 w32 w28 _   w36
