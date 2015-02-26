@@ -2,9 +2,10 @@
 # Roll for the Galaxy cheat sheets
 
 This is a small program that reads scanned images for a set of source
-tiles for the board game Roll for the Galaxy and creates various cheat
-sheets.  The cheet sheets can be used for play aids or help in
-memorizing tile sets.
+tiles for the board game [Roll for the
+Galaxy](http://boardgamegeek.com/boardgame/132531/roll-galaxy) and
+creates various cheat sheets.  The cheat sheets can be used for play
+aids or for help in memorizing tile sets.
 
 There are 55 tiles in the game each with a unique front and back side.
 These are enumerated in the file [docs/tiles.csv](docs/tiles.csv)
@@ -17,9 +18,9 @@ respectively and `NN` is the id of the tile as indicated in
 gimp. I would provide these source tiles but the game publisher has
 not responded to my requests.
 
-Layout files exist in the `res/layout directory` .  These are text files
-that represent a single cheat sheet to create.  For each layout file,
-an image file will be created in the build directory.
+Layout files exist in the `res/layout` directory.  These are text
+files that represent a single cheat sheet.  For each layout file, an
+image file will be created in the `build/` directory.
 
 For example, the layout file `green.layout` looks like this:
 
@@ -45,7 +46,7 @@ In order to run this program you need:
 
 # Running the program
 
-Edit the file src/arrange.py and set adjust the following constants
+Edit the file [src/arrange.py](src/arrange.py) and set adjust the following constants
 
 ```python
 # the rough tile width and height (pixels)
