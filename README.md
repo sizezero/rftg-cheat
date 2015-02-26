@@ -28,7 +28,7 @@ w32 w28 _   w36
 w52 w27 w54 w48
 _   w35 w31
 d43 d44 d49 d12
-``
+```
 
 and will cause the following image to be produced:
 
