@@ -2,10 +2,10 @@
 all: zip
 
 clean:
-	rm -rf build/*
+	-rm -rf build
 
 images: clean
-	mkdir build/rftg-cheat
+	mkdir -p build/rftg-cheat
 	( cd src && \
 	  gimp -i --batch-interpreter python-fu-eval \
 		-b 'execfile("arrange.py")' \
@@ -13,8 +13,8 @@ images: clean
 
 zip: images
 	( cd build/rftg-cheat && \
-	  ln -s ../../doc/tiles.csv &&\
-	  ln -s ../../res/layout )
+	  ln -s ../../docs/tiles.csv && \
+	  cp -r ../../res/layout/* . )
 	find build -name '*.xcf' -delete
 	( cd build && \
 	  zip -r rftg-cheat.zip rftg-cheat )
