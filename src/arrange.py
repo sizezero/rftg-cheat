@@ -27,9 +27,12 @@ Y_OFFSET = int(Y_OVERLAP * TILE_DIMENSION)
 # image
 SHOW_ID_ON_IMAGE = True
 
+# source tile file extension
+SRC_TILE_FILE_EXTENSION = "xcf"
+
 # loads file as image, returns the layer
 def loadTile(tile, description):
-    f = "../res/img/tiles/"+tile+".xcf"
+    f = "../res/img/tiles/"+tile+"."+SRC_TILE_FILE_EXTENSION
     if os.path.exists(f):
         image = pdb.gimp_file_load(f, f)
         layer = image.layers[0]
@@ -56,22 +59,31 @@ def loadTile(tile, description):
 
         TEXT_SIZE = int(TILE_DIMENSION / 5.7)
         float=pdb.gimp_text_fontname(
-                            image,
-                            background,
-                            0,
-                            0,
-                            description,
-                            0,   #border
-                            True, #anitalias
-                            TEXT_SIZE,   #size
-                            PIXELS, #GIMP_PIXELS
-                            "Sans")
+            image, background, 0, 0, description,
+            0,   #border
+            True, #anitalias
+            TEXT_SIZE,   #size
+            PIXELS, #GIMP_PIXELS
+            "Sans")
         pdb.gimp_text_layer_resize(float, TILE_DIMENSION, TILE_DIMENSION)
         pdb.gimp_floating_sel_anchor(float)
 
         return image.layers[0]
 
 # returns a map of tiles and layers
+# all = { 'id' : { 
+#                  'development' : { 
+#                                    'cost':int, 
+#                                    'name':text, 
+#                                    'layer':gimpLayer 
+#                                  },
+#                  'world':      : {
+#                                     'cost':int, 
+#                                     'name':text, 
+#                                     'layer':gimpLayer
+#                                  }
+#                }
+#       }
 def loadAll():
     all = {}
     with open('../docs/tiles.csv') as csvfile:
@@ -86,7 +98,12 @@ def loadAll():
             all[id] = { 'development':d, 'world':w }
     return all
 
-# returns a list of lists of None and Layout
+# returns a structured representation of the text layout file as a list of lists
+# type = 'd' or 'd'
+# id = int
+# ll = [
+#        [ (type1, id2), None, (type2, id2) ... ]
+#      ]
 def loadLayout(fname):
     rows = []
     linenum = 1
@@ -100,7 +117,11 @@ def loadLayout(fname):
                 else:
                     m = re.match(r'^(d|w)(\d\d)$', tok)
                     if m:
-                        row.append((m.group(1), int(m.group(2))))
+                        type = m.group(1)
+                        id = int(m.group(2))
+                        if id < 1 or id > 55:
+                            raise Exception(fname+"("+str(linenum)+"): id out of range '"+tok+"' line "+line)
+                        row.append((type, id))
                     else:
                         raise Exception(fname+"("+str(linenum)+"): bad token '"+tok+"' line "+line)
             if len(row) != 0:
@@ -108,7 +129,7 @@ def loadLayout(fname):
                 linenum += 1
     return rows
 
-# displays the tile; returns the width of the displayed tile
+# displays the tile with the front overlaid on the back
 def drawTile(type, id, all, image, x, y):
     r = all[id]
     if type=='d':
@@ -184,6 +205,9 @@ def layItOut(all, srcFname, dstFnameNoExtension):
     imagefile = dstFnameNoExtension+".jpg"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
+    pdb.gimp_image_delete(image)
+
+# iterate through each layout file and produce an image
 def allLayouts():
     all = loadAll()
 
