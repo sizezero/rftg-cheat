@@ -201,6 +201,7 @@ def layItOut(all, srcFname, dstFnameNoExtension):
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
 
     pdb.gimp_image_merge_visible_layers(image, 2)
+    pdb.gimp_image_scale(image, image.width / 3, image.height / 3)
     drawable = pdb.gimp_image_get_active_layer(image)
     imagefile = dstFnameNoExtension+".png"
     pdb.gimp_file_save(image, drawable, imagefile,  imagefile)
