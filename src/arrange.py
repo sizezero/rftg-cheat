@@ -208,9 +208,30 @@ def layItOut(all, srcFname, dstFnameNoExtension):
 
     pdb.gimp_image_delete(image)
 
+def writePng(layer, fname):
+    image = gimp.Image(1, 1, RGB)
+    newLayer = pdb.gimp_layer_new_from_drawable(layer, image)
+    image.add_layer(newLayer, 0)
+    newLayer.set_offsets(0, 0)
+    pdb.gimp_image_resize_to_layers(image)
+    pdb.gimp_image_merge_visible_layers(image, 2)
+    drawable = pdb.gimp_image_get_active_layer(image)
+    pdb.gimp_file_save(image, drawable, fname,  fname)
+    pdb.gimp_image_delete(image)
+    
+def writeAllPngs(all):
+    dstDir = os.path.join("../build/png")
+    os.mkdir(dstDir)
+    ids = sorted(all.keys())
+    for id in ids:
+        writePng(all[id]["development"]["layer"], os.path.join(dstDir, "d%02d.png" % id))
+        writePng(all[id]["world"]["layer"],       os.path.join(dstDir, "w%02d.png" % id))
+
 # iterate through each layout file and produce an image
 def allLayouts():
     all = loadAll()
+
+    writeAllPngs(all)
 
     for root, dirs, files in os.walk('../res/layout'):
         m = re.match(r'^../res/layout/?(.*)$', root)
